@@ -71,7 +71,7 @@ button:focus-visible {
 
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #070708, #feffff);
+  background: linear-gradient(to right, #fdfdff, #feffff);
   display: flex;
   justify-content: center;
   align-items: center;

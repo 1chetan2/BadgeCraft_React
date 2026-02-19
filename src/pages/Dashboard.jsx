@@ -3,7 +3,7 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
   const [email, setEmail] = useState("");
@@ -14,8 +14,7 @@ export default function Dashboard() {
 
   const getUserRoleFromToken = () => {
     const token =
-      localStorage.getItem("token") ||
-      sessionStorage.getItem("token");
+      localStorage.getItem("token") || sessionStorage.getItem("token");
 
     if (!token) return "";
 
@@ -23,7 +22,9 @@ export default function Dashboard() {
       const payload = JSON.parse(atob(token.split(".")[1]));
       return (
         payload.role ||
-        payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+        payload[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ] ||
         ""
       );
     } catch {
@@ -94,9 +95,16 @@ export default function Dashboard() {
     loadUsers();
   };
 
+  //for logout
+  const logout = () => {
+  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
+  navigate("/");
+};
+
+
   return (
     <div style={{ display: "flex", minHeight: "100vh", width: "100vw" }}>
-      
       {/*  Sidebar */}
       <div
         style={{
@@ -106,9 +114,12 @@ export default function Dashboard() {
           padding: "30px 20px",
         }}
       >
-        <h2>BadgeCraft</h2>
+        <h2 className="text-primary">BadgeCraft</h2>
+         <p style={{ marginTop: "30px", fontSize: "14px" }}>
+          User : {currentUserRole}
+        </p>
 
-        <p style={{ cursor: "pointer" }} onClick={() => navigate("/")}>
+        <p style={{ cursor: "pointer" }} onClick={() => navigate("/dashboard")}>
           Dashboard
         </p>
 
@@ -116,12 +127,27 @@ export default function Dashboard() {
           Badge Templates
         </p>
 
-        <p>Settings</p>
+        
 
-        <p style={{ marginTop: "30px", fontSize: "14px" }}>
-          Logged in as: {currentUserRole}
-        </p>
+       
+<p>Settings</p>
+        <button
+        onClick={logout}
+        style={{
+          marginTop: "20px",
+          background: "#dc2626",
+          color: "white",
+          border: "none",
+          padding: "8px 15px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          width: "100%",
+        }}
+      >
+        Logout
+      </button>
       </div>
+      
 
       {/*  Main Content */}
       <div style={{ flex: 1, padding: "50px 60px" }}>
@@ -181,7 +207,7 @@ export default function Dashboard() {
             boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
           }}
         >
-          <table width="100%">
+          <table width="100%" className="table table-striped">
             <thead>
               <tr>
                 <th>Email</th>
@@ -198,32 +224,36 @@ export default function Dashboard() {
 
                   {currentUserRole === "OrgAdmin" && (
                     <td>
-                      <td><button
-                        onClick={() => editUser(u)}
-                        style={{
-                          marginRight: "10px",
-                          background: "#f59e0b",
-                          color: "white",
-                          border: "none",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        Edit
-                      </button></td>
+                      <td>
+                        <button
+                          onClick={() => editUser(u)}
+                          style={{
+                            marginRight: "10px",
+                            background: "#f59e0b",
+                            color: "white",
+                            border: "none",
+                            padding: "6px 12px",
+                            borderRadius: "4px",
+                          }}
+                        >
+                          Edit
+                        </button>
+                      </td>
 
-                      <td><button
-                        onClick={() => deleteUser(u.id)}
-                        style={{
-                          background: "#dc2626",
-                          color: "white",
-                          border: "none",
-                          padding: "6px 12px",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        Delete
-                      </button></td>
+                      <td>
+                        <button
+                          onClick={() => deleteUser(u.id)}
+                          style={{
+                            background: "#dc2626",
+                            color: "white",
+                            border: "none",
+                            padding: "6px 12px",
+                            borderRadius: "4px",
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </td>
                   )}
                 </tr>

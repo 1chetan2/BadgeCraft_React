@@ -68,16 +68,19 @@ function Login() {
             onChange={handleChange}
             required
           />
-
+          <br />  <br />
           <div className="remember">
-            <label className="remember-label">
-              <input type="checkbox" name="remember" onChange={handleChange} />
-              Remember Me
-            </label>
+           
+              <div><input type="checkbox" name="remember" onChange={handleChange} /></div>
+               <div>Remember Me</div>
+          
           </div>
+            <br />  
 
           <button type="submit">Sign In</button>
+          
         </form>
+        
 
         <p>
           Don’t have an account? <Link to="/register">Sign Up</Link>
