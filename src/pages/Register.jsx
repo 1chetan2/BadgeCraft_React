@@ -66,6 +66,7 @@ function Register() {
         <p>
           Already have an account? <Link to="/">Login</Link>
         </p>
+        
       </div>
     </div>
   );

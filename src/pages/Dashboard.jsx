@@ -11,6 +11,16 @@ export default function Dashboard() {
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
   const [currentUserRole, setCurrentUserRole] = useState("");
+  const [organizations, setOrganizations] = useState([]);
+
+  const loadOrganizations = async () => {
+  try {
+    const res = await api.get("/organizations");
+    setOrganizations(res.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   const getUserRoleFromToken = () => {
     const token =
@@ -44,6 +54,7 @@ export default function Dashboard() {
   useEffect(() => {
     setCurrentUserRole(getUserRoleFromToken());
     loadUsers();
+    loadOrganizations();  
   }, []);
 
   const saveUser = async () => {
@@ -97,11 +108,10 @@ export default function Dashboard() {
 
   //for logout
   const logout = () => {
-  localStorage.removeItem("token");
-  sessionStorage.removeItem("token");
-  navigate("/");
-};
-
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    navigate("/");
+  };
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", width: "100vw" }}>
@@ -115,7 +125,7 @@ export default function Dashboard() {
         }}
       >
         <h2 className="text-primary">BadgeCraft</h2>
-         <p style={{ marginTop: "30px", fontSize: "14px" }}>
+        <p style={{ marginTop: "30px", fontSize: "14px" }}>
           User : {currentUserRole}
         </p>
 
@@ -126,28 +136,25 @@ export default function Dashboard() {
         <p style={{ cursor: "pointer" }} onClick={() => navigate("/badges")}>
           Badge Templates
         </p>
-
-        
-
        
-<p>Settings</p>
+
+        <p>Settings</p>
         <button
-        onClick={logout}
-        style={{
-          marginTop: "20px",
-          background: "#dc2626",
-          color: "white",
-          border: "none",
-          padding: "8px 15px",
-          borderRadius: "6px",
-          cursor: "pointer",
-          width: "100%",
-        }}
-      >
-        Logout
-      </button>
+          onClick={logout}
+          style={{
+            marginTop: "20px",
+            background: "#dc2626",
+            color: "white",
+            border: "none",
+            padding: "8px 15px",
+            borderRadius: "6px",
+            cursor: "pointer",
+            width: "100%",
+          }}
+        >
+          Logout
+        </button>
       </div>
-      
 
       {/*  Main Content */}
       <div style={{ flex: 1, padding: "50px 60px" }}>
@@ -166,6 +173,14 @@ export default function Dashboard() {
               boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
             }}
           >
+             {organizations.map((org) => (
+          <div key={org.id}>
+            <h3>{org.name}</h3>
+            <button onClick={() => navigate(`/badge-editor/${org.id}`)}>
+              Create Badge
+            </button>
+          </div>
+        ))}
             <input
               placeholder="Email"
               value={email}
